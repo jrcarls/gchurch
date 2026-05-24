@@ -17,3 +17,8 @@ db.sqlite3
 
 # Tool caches
 .ruff_cache/
+
+# Tailwind/DaisyUI binaries and generated CSS
+static/css/tailwindcss
+static/css/daisyui*.mjs
+static/css/output.css
