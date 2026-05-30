@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,8 +10,11 @@ from .models import Membro
 
 @login_required
 def index(request):
-    membros = Membro.objects.all()
-    return render(request, "members/index.html", {"membros": membros})
+    paginator = Paginator(Membro.objects.all(), 10)
+    page = paginator.get_page(request.GET.get("page"))
+    if request.headers.get("HX-Request"):
+        return render(request, "members/_table.html", {"membros": page})
+    return render(request, "members/index.html", {"membros": page})
 
 
 @login_required

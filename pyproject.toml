@@ -11,3 +11,8 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "ruff>=0.15.14",
 ]
+
+[dependency-groups]
+dev = [
+    "faker>=40.19.1",
+]

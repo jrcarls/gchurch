@@ -1,0 +1,95 @@
+{% load heroicons %}
+
+<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>Célula</th>
+        <th>Ministério</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for membro in membros %}
+      <tr class="hover">
+        <th>{{ forloop.counter0|add:membros.start_index }}</th>
+        <td>
+          <div class="flex items-center gap-3">
+            {% if membro.foto %}
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img src="{{ membro.foto.url }}" alt="{{ membro.nome }}" />
+                </div>
+              </div>
+            {% else %}
+              <div class="avatar avatar-placeholder">
+                <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span class="text-xs">{{ membro.nome|first|upper }}</span>
+                </div>
+              </div>
+            {% endif %}
+            <div>
+              <div class="font-medium">{{ membro.nome }}</div>
+              <div class="text-sm opacity-50">{{ membro.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ membro.telefone|default:"—" }}</td>
+        <td>{{ membro.celula|default:"—" }}</td>
+        <td>{{ membro.get_ministerio_display }}</td>
+        <td>
+          <span class="badge {% if membro.status == 'ativo' %}badge-success{% elif membro.status == 'inativo' %}badge-error{% else %}badge-warning{% endif %} badge-sm">
+            {{ membro.get_status_display }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-xs"
+            hx-get="{% url 'members_editar' membro.pk %}"
+            hx-target="#modal-content"
+            hx-swap="innerHTML"
+            hx-on::after-request="document.getElementById('membro-modal').showModal()">
+            {% heroicon_outline "pencil-square" class="size-4" %}
+          </button>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center opacity-50 py-8">Nenhum membro cadastrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if membros.has_other_pages %}
+<div class="flex items-center justify-between mt-4 px-1">
+  <span class="text-sm text-base-content/60">
+    Exibindo {{ membros.start_index }}-{{ membros.end_index }} de {{ membros.paginator.count }} membros
+  </span>
+  <div class="join">
+    {% if membros.has_previous %}
+    <a hx-get="?page={{ membros.previous_page_number }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">«</a>
+    {% else %}
+    <button class="join-item btn btn-sm btn-disabled">«</button>
+    {% endif %}
+
+    {% for num in membros.paginator.page_range %}
+      {% if membros.number == num %}
+      <button class="join-item btn btn-sm btn-active">{{ num }}</button>
+      {% else %}
+      <a hx-get="?page={{ num }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if membros.has_next %}
+    <a hx-get="?page={{ membros.next_page_number }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">»</a>
+    {% else %}
+    <button class="join-item btn btn-sm btn-disabled">»</button>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
