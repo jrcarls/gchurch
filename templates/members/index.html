@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static heroicons %}
+
+{% block title %}Gchurch | Membros{% endblock %}
+
+{% block page_title %}Membros{% endblock %}
+
+{% block extra_head %}<script src="{% static 'js/members.js' %}"></script>{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+  <label class="input w-72">
+    {% heroicon_outline "magnifying-glass" class="size-4 opacity-50" %}
+    <input type="search" placeholder="Buscar membro..." />
+  </label>
+  <button class="btn btn-primary"
+    hx-get="{% url 'members_criar' %}"
+    hx-target="#modal-content"
+    hx-swap="innerHTML"
+    hx-on::after-request="document.getElementById('membro-modal').showModal()">
+    {% heroicon_outline "plus" class="size-4" %} Novo Membro
+  </button>
+</div>
+
+<dialog id="membro-modal" class="modal">
+  <div class="modal-box max-w-2xl">
+    <h3 class="text-lg font-bold mb-4">Novo Membro</h3>
+    <div id="modal-content"></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button>fechar</button></form>
+</dialog>
+{% endblock %}

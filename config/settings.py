@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "heroicons",
     "accounts",
     "members",
+    "groups",
 ]
 
 MIDDLEWARE = [

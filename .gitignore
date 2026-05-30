@@ -15,6 +15,9 @@ db.sqlite3
 # Environment variables
 .env
 
+# Local notes
+NOTES.md
+
 # Tool caches
 .ruff_cache/
 

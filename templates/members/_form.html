@@ -1,0 +1,134 @@
+{% load heroicons %}
+
+<form method="post" enctype="multipart/form-data"
+  hx-post="{{ action_url }}"
+  hx-target="#modal-content"
+  hx-swap="innerHTML"
+  x-data="membroForm({ nome: '{{ form.nome.value|default:'' }}', email: '{{ form.email.value|default:'' }}' })"
+  @submit="submit($event)">
+  {% csrf_token %}
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <div class="md:col-span-2 fieldset">
+      <label class="fieldset-label">Nome</label>
+      <input type="text" name="nome"
+        x-model="nome"
+        @blur="touched.nome = true"
+        class="input w-full"
+        :class="{ 'input-error': nomeError }"
+        placeholder="Nome completo" />
+      <p class="text-error text-sm" x-show="nomeError" x-text="nomeError"></p>
+      {% for error in form.nome.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Email</label>
+      <input type="email" name="email"
+        x-model="email"
+        @blur="touched.email = true"
+        class="input w-full"
+        :class="{ 'input-error': emailError }"
+        placeholder="email@exemplo.com" />
+      <p class="text-error text-sm" x-show="emailError" x-text="emailError"></p>
+      {% for error in form.email.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Telefone</label>
+      <input type="text" name="telefone" value="{{ form.telefone.value|default:'' }}"
+        class="input w-full {% if form.telefone.errors %}input-error{% endif %}"
+        placeholder="(00) 00000-0000" />
+      {% for error in form.telefone.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Data de Nascimento</label>
+      <input type="date" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}"
+        class="input w-full {% if form.data_nascimento.errors %}input-error{% endif %}" />
+      {% for error in form.data_nascimento.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Data de Batismo</label>
+      <input type="date" name="data_batismo" value="{{ form.data_batismo.value|default:'' }}"
+        class="input w-full {% if form.data_batismo.errors %}input-error{% endif %}" />
+      {% for error in form.data_batismo.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="md:col-span-2 fieldset">
+      <label class="fieldset-label">Logradouro</label>
+      <input type="text" name="logradouro" value="{{ form.logradouro.value|default:'' }}"
+        class="input w-full {% if form.logradouro.errors %}input-error{% endif %}"
+        placeholder="Rua, número, bairro" />
+      {% for error in form.logradouro.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Cidade</label>
+      <input type="text" name="cidade" value="{{ form.cidade.value|default:'' }}"
+        class="input w-full {% if form.cidade.errors %}input-error{% endif %}"
+        placeholder="Cidade" />
+      {% for error in form.cidade.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Estado</label>
+      <input type="text" name="estado" value="{{ form.estado.value|default:'' }}"
+        class="input w-full {% if form.estado.errors %}input-error{% endif %}"
+        placeholder="UF" maxlength="2" />
+      {% for error in form.estado.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Célula</label>
+      <select name="celula" class="select w-full {% if form.celula.errors %}select-error{% endif %}">
+        <option value="">---------</option>
+        {% for value, label in form.celula.field.choices %}
+          {% if value %}
+            <option value="{{ value }}" {% if form.celula.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      {% for error in form.celula.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Ministério</label>
+      <select name="ministerio" class="select w-full {% if form.ministerio.errors %}select-error{% endif %}">
+        {% for value, label in form.ministerio.field.choices %}
+          <option value="{{ value }}" {% if form.ministerio.value == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      {% for error in form.ministerio.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Status</label>
+      <select name="status" class="select w-full {% if form.status.errors %}select-error{% endif %}">
+        {% for value, label in form.status.field.choices %}
+          <option value="{{ value }}" {% if form.status.value == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      {% for error in form.status.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-label">Foto</label>
+      <input type="file" name="foto" accept="image/*"
+        class="file-input w-full {% if form.foto.errors %}file-input-error{% endif %}" />
+      {% for error in form.foto.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+    </div>
+
+  </div>
+
+  <div class="flex justify-end gap-3 pt-2">
+    <button type="button" class="btn btn-ghost"
+      onclick="document.getElementById('membro-modal').close()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" :disabled="formInvalid">
+      {% heroicon_outline "check" class="size-4" %}
+      {% if membro %}Salvar{% else %}Cadastrar{% endif %}
+    </button>
+  </div>
+
+</form>
