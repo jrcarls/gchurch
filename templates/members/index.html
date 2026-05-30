@@ -11,7 +11,12 @@
 <div class="flex items-center justify-between mb-6">
   <label class="input w-72">
     {% heroicon_outline "magnifying-glass" class="size-4 opacity-50" %}
-    <input type="search" placeholder="Buscar membro..." />
+    <input type="search" name="q" placeholder="Buscar membro..." value="{{ q }}"
+      hx-get="{% url 'members' %}"
+      hx-trigger="input delay:300ms, search"
+      hx-target="#members-table"
+      hx-swap="innerHTML"
+      hx-push-url="true" />
   </label>
   <button class="btn btn-primary"
     hx-get="{% url 'members_criar' %}"

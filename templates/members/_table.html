@@ -52,7 +52,7 @@
             hx-target="#modal-content"
             hx-swap="innerHTML"
             hx-on::after-request="document.getElementById('membro-modal').showModal()">
-            {% heroicon_outline "pencil-square" class="size-4" %}
+            {% heroicon_outline "pencil-square" class="size-5" %}
           </button>
         </td>
       </tr>
@@ -72,7 +72,7 @@
   </span>
   <div class="join">
     {% if membros.has_previous %}
-    <a hx-get="?page={{ membros.previous_page_number }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">«</a>
+    <a hx-get="?page={{ membros.previous_page_number }}{% if q %}&q={{ q }}{% endif %}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">«</a>
     {% else %}
     <button class="join-item btn btn-sm btn-disabled">«</button>
     {% endif %}
@@ -81,12 +81,12 @@
       {% if membros.number == num %}
       <button class="join-item btn btn-sm btn-active">{{ num }}</button>
       {% else %}
-      <a hx-get="?page={{ num }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">{{ num }}</a>
+      <a hx-get="?page={{ num }}{% if q %}&q={{ q }}{% endif %}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">{{ num }}</a>
       {% endif %}
     {% endfor %}
 
     {% if membros.has_next %}
-    <a hx-get="?page={{ membros.next_page_number }}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">»</a>
+    <a hx-get="?page={{ membros.next_page_number }}{% if q %}&q={{ q }}{% endif %}" hx-target="#members-table" hx-swap="innerHTML" hx-push-url="true" class="join-item btn btn-sm">»</a>
     {% else %}
     <button class="join-item btn btn-sm btn-disabled">»</button>
     {% endif %}
